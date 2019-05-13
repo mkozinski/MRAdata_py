@@ -3,6 +3,7 @@ function getSplit {
   local LBLDIR=$2
   local LBLPROJDIR=$3
   local DATADIR=$4
+  local LBLMARGDIR=$5
   local trainFile=trainFiles.txt
   local testFile=testFiles.txt
   if [[ -e $trainFile ]] ; then
@@ -13,7 +14,9 @@ function getSplit {
     echo "Error: $testFile exists"
     exit 2
   fi
+  echo -e "# image, label, label_with_margins, projection_labels" >> $trainFile
   echo -e "trainFiles=[" >> $trainFile
+  echo -e "# image, label, label_with_margins, projection_labels" >> $testFile
   echo -e "testFiles=[" >> $testFile
   for A in $DATADIR/*
   do
@@ -29,6 +32,7 @@ function getSplit {
     for piece in 0 1 2 3; do # every file is cut into 4 pieces
       echo -en "[\"$IMGDIR/${R}_$piece.npy\", " >> $outfile
       echo -en  "\"$LBLDIR/${R}_$piece.npy\", " >> $outfile
+      echo -en  "\"$LBLMARGDIR/${R}_$piece.npy\", " >> $outfile
       echo -en "[" >> $outfile
       for proj in 0 1 2; do # every piece has 3 projections
         echo -en "\"$LBLPROJDIR/${R}_${piece}_$proj.npy\", " >> $outfile
@@ -44,7 +48,8 @@ function getSplit {
 #IMGDIR=img_cut
 #LBLDIR=lbl_cut
 #LBLPROJDIR=lbl_projections
-#getSplit "$IMGDIR"  "$LBLDIR"  "$LBLPROJDIR" "$DATADIR"
+#LBLMARGDIR=lbl_with_margins
+#getSplit "$IMGDIR"  "$LBLDIR"  "$LBLPROJDIR" "$DATADIR" "$LBLMARGDIR"
 
 echo "generating the split files"
-getSplit "$1" "$2" "$3" "$4"
+getSplit "$1" "$2" "$3" "$4" "$5"

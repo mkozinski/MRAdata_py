@@ -98,4 +98,11 @@ for LBL in lbl_cut/*.npy; do
   python project.py "$LBL" lbl_projections/"$OUTNAME"
 done
   
-./split_data.sh img_cut lbl_cut lbl_projections img
+echo "generating labels with margins in lbl_with_margin"
+mkdir lbl_with_margin
+for LBL in lbl_cut/*.npy; do
+  OUTNAME=`basename "$LBL"`
+  python addMargin2Lbl.py "$LBL" lbl_with_margin/"$OUTNAME"
+done
+
+./split_data.sh img_cut lbl_cut lbl_projections img lbl_with_margin
