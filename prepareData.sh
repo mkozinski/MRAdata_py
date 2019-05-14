@@ -105,4 +105,4 @@ for LBL in lbl_cut/*.npy; do
   python addMargin2Lbl.py "$LBL" lbl_with_margin/"$OUTNAME"
 done
 
-./split_data.sh img_cut lbl_cut lbl_projections img lbl_with_margin
+./split_data.sh img_cropped lbl_cropped img_cut lbl_cut lbl_projections lbl_with_margin
